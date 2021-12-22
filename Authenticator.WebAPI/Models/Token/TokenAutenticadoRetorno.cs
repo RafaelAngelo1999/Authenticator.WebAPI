@@ -2,7 +2,7 @@
 {
     public class TokenAutenticadoRetorno
     {
-        public Guid Id { get; set; }
+        public string Key { get; set; }
         public DateTime Vencimento { get; set; }
     }
 }

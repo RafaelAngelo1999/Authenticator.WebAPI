@@ -1,4 +1,4 @@
-﻿using Authenticador.Domain.Models.Usuario;
+﻿using Authenticador.Domain.Models;
 using Authenticador.Infra.Data.Entities.Usuario;
 using AutoMapper;
 

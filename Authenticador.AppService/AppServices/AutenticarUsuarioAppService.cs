@@ -1,6 +1,6 @@
 ﻿using Authenticador.AppService.Interfaces;
 using Authenticador.Domain.Interfaces;
-using Authenticador.Domain.Models.Usuario;
+using Authenticador.Domain.Models;
 
 namespace Authenticador.AppService.AppServices
 {
@@ -12,9 +12,13 @@ namespace Authenticador.AppService.AppServices
         {
             _autenticacaoService = autenticacaoService;
         }
-        public async Task<Usuario> AutenticarUsuarioPorUsernamePasswordAsync(string username, string password)
+        public async Task<UsuarioAutenticado> AutenticarUsuarioPorUsernamePasswordAsync(string username, string password)
         {
-            return await _autenticacaoService.ObterUsuarioPorUsernamePasswordAsync(username, password).ConfigureAwait(false);
+            var usuario =  await _autenticacaoService.ObterUsuarioPorUsernamePasswordAsync(username, password).ConfigureAwait(false);
+            
+            var token =  _autenticacaoService.GerarTokenUsuario(usuario);
+
+            return new UsuarioAutenticado { Token = token, DadosUsuario = usuario };
         }
     }
 }

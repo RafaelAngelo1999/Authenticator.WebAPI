@@ -1,9 +1,9 @@
-﻿using Authenticador.Domain.Models.Usuario;
+﻿using Authenticador.Domain.Models;
 
 namespace Authenticador.AppService.Interfaces
 {
     public interface IAutenticarUsuarioAppService
     {
-        Task<Usuario> AutenticarUsuarioPorUsernamePasswordAsync(string username, string password);
+        Task<UsuarioAutenticado> AutenticarUsuarioPorUsernamePasswordAsync(string username, string password);
     }
 }
