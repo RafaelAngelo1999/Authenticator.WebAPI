@@ -1,7 +1,7 @@
 # Authenticator.WebAPI
 Aplicação de autenticação JWT utilizando DDD.
 
-![](assets/aplication.png)
+![](assets/application.png)
 
 ## Rotas
 
