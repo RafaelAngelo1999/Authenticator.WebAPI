@@ -1,6 +1,8 @@
 ﻿using Authenticador.AppService.Interfaces;
 using Authenticador.Infra.Data.Entities.Usuario;
 using Authenticador.Infra.Data.Repositories.Base;
+using Authenticator.WebAPI.Models.Usuario;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +14,13 @@ namespace Authenticator.WebAPI.Controllers
     public class LoginController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public LoginController(AppDbContext context)
+
+        public LoginController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -71,12 +76,14 @@ namespace Authenticator.WebAPI.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<UsuarioEntity>> CriarUsuario (UsuarioEntity UsuarioEntity)
+        public async Task<ActionResult<UsuarioEntity>> CriarUsuario (UsuarioInput usuarioInput)
         {
-            _context.Usuario.Add(UsuarioEntity);
+            var usuarioEntity = _mapper.Map<UsuarioInput, UsuarioEntity>(usuarioInput);
+
+            _context.Usuario.Add(usuarioEntity);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUsuarioEntity", new { id = UsuarioEntity.Id }, UsuarioEntity);
+            return CreatedAtAction("ObterUsuario", new { id = usuarioEntity.Id }, usuarioEntity);
         }
 
         [HttpDelete("{id}")]

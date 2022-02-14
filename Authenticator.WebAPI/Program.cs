@@ -5,6 +5,7 @@ using Authenticador.Domain.Services;
 using Authenticador.Infra.Data.Interfaces.Usuario;
 using Authenticador.Infra.Data.Repositories.Base;
 using Authenticador.Infra.Data.Repositories.Usuario;
+using Authenticador.WebApi.Filters;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ IConfiguration configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.Filters.Add(typeof (HttpGlobalExceptionFilter)));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 var key = Encoding.ASCII.GetBytes("d41d8cd98f00b204e9800998ecf8427e");
@@ -32,9 +33,9 @@ builder.Services.AddSwaggerGen(c =>
 
       c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
       {
-        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+        Description = @"JWT Authorization header using the Bearer scheme. 
                       Enter 'Bearer' [space] and then your token in the text input below.
-                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                      Example: 'Bearer 12345abcdef'",
          Name = "Authorization",
          In = ParameterLocation.Header,
          Type = SecuritySchemeType.ApiKey,

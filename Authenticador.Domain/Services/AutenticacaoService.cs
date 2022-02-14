@@ -27,7 +27,8 @@ namespace Authenticador.Domain.Services
         {
             var usuarioEntity = await _usuarioRepository.ObterUsuarioPorUsernamePassword(username, password);
 
-            usuarioEntity.Role = await _roleRepository.ObterRolePorId(usuarioEntity.RoleId);
+            if (!string.IsNullOrEmpty(usuarioEntity?.RoleId.ToString()))
+                usuarioEntity.Role = await _roleRepository.ObterRolePorId(usuarioEntity.RoleId ?? Guid.Empty);
 
             return _mapper.Map<UsuarioEntity, Usuario>(usuarioEntity);
         }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Authenticador.Infra.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220212192410_initial1")]
-    partial class initial1
+    [Migration("20220214221322_initialize")]
+    partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,9 +45,9 @@ namespace Authenticador.Infra.Data.Migrations
                         new
                         {
                             Id = new Guid("4ce35776-1d62-438b-aae9-59bfb252d74d"),
-                            Create_At = new DateTime(2022, 2, 12, 16, 24, 10, 724, DateTimeKind.Local).AddTicks(3772),
+                            Create_At = new DateTime(2022, 2, 14, 19, 13, 21, 887, DateTimeKind.Local).AddTicks(981),
                             Descricao = "Manager",
-                            Update_At = new DateTime(2022, 2, 12, 16, 24, 10, 724, DateTimeKind.Local).AddTicks(3779)
+                            Update_At = new DateTime(2022, 2, 14, 19, 13, 21, 887, DateTimeKind.Local).AddTicks(989)
                         });
                 });
 
@@ -68,7 +68,7 @@ namespace Authenticador.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("RoleId")
+                    b.Property<Guid?>("RoleId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("Update_At")
@@ -89,9 +89,7 @@ namespace Authenticador.Infra.Data.Migrations
                 {
                     b.HasOne("Authenticador.Infra.Data.Entities.Usuario.RoleEntity", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
                 });
