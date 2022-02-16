@@ -21,15 +21,22 @@ IWebHostEnvironment environment = builder.Environment;
 // Add services to the container.
 
 builder.Services.AddControllers(options => options.Filters.Add(typeof (HttpGlobalExceptionFilter)));
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 var key = Encoding.ASCII.GetBytes("d41d8cd98f00b204e9800998ecf8427e");
 builder.Services.AddAuthentication(x => { x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; }).AddJwtBearer(x => { x.RequireHttpsMetadata = false; x.SaveToken = true; x.TokenValidationParameters = new TokenValidationParameters { ValidateIssuerSigningKey = true, IssuerSigningKey = new SymmetricSecurityKey(key), ValidateIssuer = false, ValidateAudience = false }; });
+
 var serverVersion = new MySqlServerVersion(new Version(10,4,22));
-builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(configuration.GetConnectionString("DefaultConnection"), serverVersion));
+var host = configuration["DBHOST"] ?? "localhost";
+var password = configuration["MYSQL_PASSWORD"] ?? configuration.GetConnectionString("MYSQL_PASSWORD");
+var userid = configuration["MYSQL_USER"] ?? configuration.GetConnectionString("MYSQL_USER");
+var usersDataBase = configuration["MYSQL_DATABASE"] ?? configuration.GetConnectionString("MYSQL_DATABASE");
+
+var connString = $"Server={host};DataBase={usersDataBase};Uid={userid};Pwd={password}";
+builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connString, serverVersion));
 builder.Services.AddSwaggerGen(c =>
   {
-      c.SwaggerDoc("v1", new OpenApiInfo { Title = "You api title", Version = "v1" });
+      c.SwaggerDoc("v1", new OpenApiInfo { Title = "API DE AUTENTICAÇÃO", Version = "v1" });
 
       c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
       {
@@ -87,14 +94,8 @@ var mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
