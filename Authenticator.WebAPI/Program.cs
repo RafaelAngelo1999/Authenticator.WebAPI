@@ -27,10 +27,10 @@ var key = Encoding.ASCII.GetBytes("d41d8cd98f00b204e9800998ecf8427e");
 builder.Services.AddAuthentication(x => { x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; }).AddJwtBearer(x => { x.RequireHttpsMetadata = false; x.SaveToken = true; x.TokenValidationParameters = new TokenValidationParameters { ValidateIssuerSigningKey = true, IssuerSigningKey = new SymmetricSecurityKey(key), ValidateIssuer = false, ValidateAudience = false }; });
 
 var serverVersion = new MySqlServerVersion(new Version(10,4,22));
-var host = configuration["DBHOST"] ?? configuration.GetConnectionString("MYSQL_PASSWORD");
-var password = configuration["MYSQL_PASSWORD"] ?? configuration.GetConnectionString("MYSQL_PASSWORD");
-var userid = configuration["MYSQL_USER"] ?? configuration.GetConnectionString("MYSQL_USER");
-var usersDataBase = configuration["MYSQL_DATABASE"] ?? configuration.GetConnectionString("MYSQL_DATABASE");
+var host = Environment.GetEnvironmentVariable("DBHOST") ?? configuration.GetConnectionString("DBHOST");
+var password = Environment.GetEnvironmentVariable("MYSQL_PASSWORD") ?? configuration.GetConnectionString("MYSQL_PASSWORD");
+var userid = Environment.GetEnvironmentVariable("MYSQL_USER") ?? configuration.GetConnectionString("MYSQL_USER");
+var usersDataBase = Environment.GetEnvironmentVariable("MYSQL_DATABASE") ?? configuration.GetConnectionString("MYSQL_DATABASE");
 
 var connString = $"Server={host};DataBase={usersDataBase};Uid={userid};Pwd={password}";
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connString, serverVersion));
@@ -95,10 +95,7 @@ builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API DE AUTENTICACAO");
-});
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
