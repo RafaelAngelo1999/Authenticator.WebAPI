@@ -27,7 +27,7 @@ var key = Encoding.ASCII.GetBytes("d41d8cd98f00b204e9800998ecf8427e");
 builder.Services.AddAuthentication(x => { x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; }).AddJwtBearer(x => { x.RequireHttpsMetadata = false; x.SaveToken = true; x.TokenValidationParameters = new TokenValidationParameters { ValidateIssuerSigningKey = true, IssuerSigningKey = new SymmetricSecurityKey(key), ValidateIssuer = false, ValidateAudience = false }; });
 
 var serverVersion = new MySqlServerVersion(new Version(10,4,22));
-var host = configuration["DBHOST"] ?? "localhost";
+var host = configuration["DBHOST"] ?? configuration.GetConnectionString("MYSQL_PASSWORD");
 var password = configuration["MYSQL_PASSWORD"] ?? configuration.GetConnectionString("MYSQL_PASSWORD");
 var userid = configuration["MYSQL_USER"] ?? configuration.GetConnectionString("MYSQL_USER");
 var usersDataBase = configuration["MYSQL_DATABASE"] ?? configuration.GetConnectionString("MYSQL_DATABASE");
@@ -36,7 +36,7 @@ var connString = $"Server={host};DataBase={usersDataBase};Uid={userid};Pwd={pass
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connString, serverVersion));
 builder.Services.AddSwaggerGen(c =>
   {
-      c.SwaggerDoc("v1", new OpenApiInfo { Title = "API DE AUTENTICAÇÃO", Version = "v1" });
+      c.SwaggerDoc("v1", new OpenApiInfo { Title = "API DE AUTENTICACAO", Version = "v1" });
 
       c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
       {
@@ -95,7 +95,10 @@ builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API DE AUTENTICACAO");
+});
 
 app.UseHttpsRedirection();
 
