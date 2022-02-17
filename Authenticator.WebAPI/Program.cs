@@ -36,7 +36,7 @@ var connString = "server=us-cdbr-east-05.cleardb.net;database=heroku_27f6713ec0e
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connString, serverVersion));
 builder.Services.AddSwaggerGen(c =>
   {
-      c.SwaggerDoc("v1", new OpenApiInfo { Title = "API DE AUTENTICAÇÃO", Version = "v1" });
+      c.SwaggerDoc("v1", new OpenApiInfo { Title = $"API DE AUTENTICAÇÃO{host} {connString} {Environment.GetEnvironmentVariable("DBHOST")}", Version = "v1" });
 
       c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
       {
