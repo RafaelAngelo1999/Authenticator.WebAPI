@@ -3,6 +3,10 @@ Aplicação de autenticação JWT utilizando DDD.
 
 ![](assets/application.png)
 
+## Publicado 
+
+[API AUTH - DEMO](https://authentication-webapi.herokuapp.com/swagger/index.html)
+
 ## Rotas
 
 - Autenticar e obter token 
