@@ -32,7 +32,7 @@ var password = configuration.GetConnectionString("MYSQL_PASSWORD");
 var userid = configuration.GetConnectionString("MYSQL_USER");
 var usersDataBase = configuration.GetConnectionString("MYSQL_DATABASE");
 
-var connString = $"Server={host};DataBase={usersDataBase};Uid={userid};Pwd={password}";
+var connString = "server=us-cdbr-east-05.cleardb.net;database=heroku_27f6713ec0e1b22;uid=bcb70f5487aa45;pwd=fed99981";
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connString, serverVersion));
 builder.Services.AddSwaggerGen(c =>
   {
