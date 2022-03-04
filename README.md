@@ -30,7 +30,7 @@ Foi desenvolvido uma API de autenticação utilizando JWT para validação de ro
 }
 ```
 
-## Modelo de retorno para tokens de role invalida
+## Modelo de retorno para tokens não autenticados 401 - Unauthorized
 
 ```
 Code	Details
@@ -45,6 +45,20 @@ Response headers
  www-authenticate: Bearer 
 ```
 
+## Modelo de retorno para tokens de role invalida 403 - Forbidden
+
+```
+403
+Undocumented
+Error: Forbidden
+
+Response headers
+ connection: keep-alive 
+ content-length: 0 
+ date: Fri,04 Mar 2022 22:41:53 GMT 
+ server: Kestrel 
+ via: 1.1 vegur 
+```
 ## Modelo de retorno para tokens corretamente
 
 ```
