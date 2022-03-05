@@ -1,5 +1,5 @@
 # Authenticator.WebAPI
-Aplicação de autenticação JWT utilizando DDD.
+Aplicação de autorização e autenticação por JWT, validando roles de acesso desenvolvida utilizando o paradigma DDD (Domain-Driven Design)
 
 ![](assets/application.png)
 
